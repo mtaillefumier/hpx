@@ -388,7 +388,7 @@ run_benchmark(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-int hpx_main(boost::program_options::variables_map& vm)
+int stream_main(boost::program_options::variables_map& vm)
 {
     std::size_t vector_size = vm["vector_size"].as<std::size_t>();
     std::size_t offset = vm["offset"].as<std::size_t>();
@@ -520,6 +520,8 @@ int hpx_main(boost::program_options::variables_map& vm)
     return hpx::finalize();
 }
 
+#include <hpx/runtime/resource/partitioner.hpp>
+
 int main(int argc, char* argv[])
 {
     using namespace boost::program_options;
@@ -550,21 +552,13 @@ int main(int argc, char* argv[])
 #endif
         ;
 
-    // parse command line here to extract the necessary settings for HPX
-    parsed_options opts =
-        command_line_parser(argc, argv)
-            .allow_unregistered()
-            .options(cmdline)
-            .style(command_line_style::unix_style)
-            .run();
-
-    variables_map vm;
-    store(opts, vm);
+//     hpx::resource::partitioner rp(cmdline, argc, argv);
+//     return hpx::init();
 
     std::vector<std::string> cfg = {
         "hpx.numa_sensitive=2"  // no-cross NUMA stealing
     };
 
-    return hpx::init(cmdline, argc, argv, cfg);
+    return hpx::init(&stream_main, cmdline, argc, argv, cfg);
 }
 

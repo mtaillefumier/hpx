@@ -104,7 +104,7 @@ namespace hpx { namespace actions
         {
             template<typename F>
             HPX_CONSTEXPR typename hpx::actions::detail::action_from_lambda<F>::type
-            operator += (F* f)
+            operator += (F* f) const
             {
                 static_assert(
                     //!std::is_assignable<F,F>::value &&

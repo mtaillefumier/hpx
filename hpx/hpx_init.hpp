@@ -10,6 +10,20 @@
 #ifndef HPX_HPX_INIT_HPP
 #define HPX_HPX_INIT_HPP
 
+// // We don't hpx_init and friends when compiling in device mode
+#if 0//defined(__CUDA_ARCH__)
+
+namespace hpx
+{
+    template <typename...Dummy>
+    int init(Dummy&&...)
+    {
+        return 0;
+    }
+}
+
+#else
+
 #include <hpx/config.hpp>
 #include <hpx/hpx_finalize.hpp>
 #include <hpx/runtime/runtime_mode.hpp>
@@ -714,6 +728,8 @@ namespace hpx
 #if !defined(HPX_EXPORTS)
 #  include <hpx/hpx_init_impl.hpp>
 #endif
+#endif
+
 #endif
 
 #endif /*HPX_HPX_INIT_HPP*/

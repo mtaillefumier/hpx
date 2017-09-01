@@ -362,6 +362,7 @@ namespace hpx { namespace lcos { namespace detail
 #if defined(HPX_HAVE_EXECUTOR_COMPATIBILITY)
     template <typename ContResult, typename Future, typename Executor,
         typename F>
+    HPX_DEPRECATED(HPX_DEPRECATED_MSG)
     inline typename hpx::traits::detail::shared_state_ptr<
         typename continuation_result<ContResult>::type
     >::type

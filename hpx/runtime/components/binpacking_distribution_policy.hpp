@@ -8,6 +8,9 @@
 #if !defined(HPX_COMPONENTS_BINPACKING_DISTRIBUTION_POLICY_APR_10_2015_0344PM)
 #define HPX_COMPONENTS_BINPACKING_DISTRIBUTION_POLICY_APR_10_2015_0344PM
 
+//#if !defined(__CUDA_ARCH__)
+#if !defined(__CUDACC__)
+
 #include <hpx/config.hpp>
 #include <hpx/dataflow.hpp>
 #include <hpx/lcos/future.hpp>
@@ -99,7 +102,7 @@ namespace hpx { namespace components
 
             return hpx::dataflow(hpx::launch::sync,
                 hpx::util::unwrapping(
-                    [](std::vector<std::uint64_t> && values)
+                    [](std::vector<std::uint64_t> values)
                     {
                         return values;
                     }),
@@ -484,5 +487,6 @@ namespace hpx
     }
 }
 /// \endcond
+#endif
 
 #endif
