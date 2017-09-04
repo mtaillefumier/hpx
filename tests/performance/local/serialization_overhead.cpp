@@ -7,11 +7,11 @@
 #include <hpx/include/actions.hpp>
 #include <hpx/include/iostreams.hpp>
 #include <hpx/include/serialization.hpp>
+#include <hpx/util/format.hpp>
 #include <hpx/util/high_resolution_timer.hpp>
 
 #include <hpx/runtime/serialization/detail/preprocess.hpp>
 
-#include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <algorithm>
@@ -180,8 +180,8 @@ int hpx_main(boost::program_options::variables_map& vm)
     if (print_header)
         hpx::cout << "datasize,testcount,average_time[s]\n" << hpx::flush;
 
-    hpx::cout << (boost::format("%d,%d,%f\n") %
-        data_size % iterations % (overall_time / concurrency)) << hpx::flush;
+    hpx::util::format_to(hpx::cout, "%d,%d,%f\n",
+        data_size, iterations, overall_time / concurrency) << hpx::flush;
 
     return hpx::finalize();
 }

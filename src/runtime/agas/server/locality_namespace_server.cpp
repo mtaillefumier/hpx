@@ -19,12 +19,11 @@
 #include <hpx/runtime/components/stubs/runtime_support.hpp>
 #include <hpx/runtime/serialization/vector.hpp>
 #include <hpx/util/bind.hpp>
+#include <hpx/util/format.hpp>
 #include <hpx/util/get_and_reset_value.hpp>
 #include <hpx/util/insert_checked.hpp>
 #include <hpx/util/logging.hpp>
 #include <hpx/util/scoped_timer.hpp>
-
-#include <boost/format.hpp>
 
 #include <atomic>
 #include <cstddef>
@@ -46,10 +45,6 @@ void locality_namespace::register_counter_types(
 {
     using util::placeholders::_1;
     using util::placeholders::_2;
-    boost::format help_count(
-        "returns the number of invocations of the AGAS service '%s'");
-    boost::format help_time(
-        "returns the overall execution time of the AGAS service '%s'");
     performance_counters::create_counter_func creator(
         util::bind(&performance_counters::agas_raw_counter_creator, _1, _2
       , agas::server::locality_namespace_service_name));
@@ -70,9 +65,13 @@ void locality_namespace::register_counter_types(
 
         if (detail::locality_namespace_services[i].target_ ==
             detail::counter_target_count)
-            help = boost::str(help_count % name.substr(p+1));
+            help = hpx::util::format(
+                "returns the number of invocations of the AGAS service '%s'",
+                name.substr(p+1));
         else
-            help = boost::str(help_time % name.substr(p+1));
+            help = hpx::util::format(
+                "returns the overall execution time of the AGAS service '%s'",
+                name.substr(p+1));
 
         performance_counters::install_counter_type(
             agas::performance_counter_basename + name
@@ -237,10 +236,10 @@ std::uint32_t locality_namespace::allocate(
 
         HPX_THROW_EXCEPTION(lock_error
           , "locality_namespace::allocate"
-          , boost::str(boost::format(
+          , hpx::util::format(
                 "partition table insertion failed due to a locking "
                 "error or memory corruption, endpoint(%1%), "
-                "prefix(%2%)") % endpoints % prefix));
+                "prefix(%2%)", endpoints, prefix));
     }
 
 
@@ -256,16 +255,16 @@ std::uint32_t locality_namespace::allocate(
         {
             HPX_THROW_EXCEPTION(bad_request
               , "locality_namespace::allocate"
-              , boost::str(boost::format(
-                    "unable to bind prefix(%1%) to a gid") % prefix));
+              , hpx::util::format(
+                    "unable to bind prefix(%1%) to a gid", prefix));
         }
         return prefix;
     }
 
-    LAGAS_(info) << (boost::format(
+    LAGAS_(info) << hpx::util::format(
         "locality_namespace::allocate, ep(%1%), count(%2%), "
-        "prefix(%3%)")
-        % endpoints % count % prefix);
+        "prefix(%3%)",
+        endpoints, count, prefix);
 
     return prefix;
 } // }}}
@@ -350,17 +349,17 @@ void locality_namespace::free(naming::gid_type locality)
         }
 
         /*
-        LAGAS_(info) << (boost::format(
-            "locality_namespace::free, ep(%1%)")
-            % ep);
+        LAGAS_(info) << hpx::util::format(
+            "locality_namespace::free, ep(%1%)",
+            ep);
         */
     }
 
     /*
-    LAGAS_(info) << (boost::format(
+    LAGAS_(info) << hpx::util::format(
         "locality_namespace::free, ep(%1%), "
-        "response(no_success)")
-        % ep);
+        "response(no_success)",
+        ep);
     */
 } // }}}
 
@@ -381,9 +380,9 @@ std::vector<std::uint32_t> locality_namespace::localities()
     for (/**/; it != end; ++it)
         p.push_back(it->first);
 
-    LAGAS_(info) << (boost::format(
-        "locality_namespace::localities, localities(%1%)")
-        % p.size());
+    LAGAS_(info) << hpx::util::format(
+        "locality_namespace::localities, localities(%1%)",
+        p.size());
 
     return p;
 } // }}}
@@ -399,9 +398,9 @@ std::uint32_t locality_namespace::get_num_localities()
     std::uint32_t num_localities =
         static_cast<std::uint32_t>(partitions_.size());
 
-    LAGAS_(info) << (boost::format(
-        "locality_namespace::get_num_localities, localities(%1%)")
-        % num_localities);
+    LAGAS_(info) << hpx::util::format(
+        "locality_namespace::get_num_localities, localities(%1%)",
+        num_localities);
 
     return num_localities;
 } // }}}
@@ -420,9 +419,9 @@ std::vector<std::uint32_t> locality_namespace::get_num_threads()
         num_threads.push_back(get<1>(it->second));
     }
 
-    LAGAS_(info) << (boost::format(
-        "locality_namespace::get_num_threads, localities(%1%)")
-        % num_threads.size());
+    LAGAS_(info) << hpx::util::format(
+        "locality_namespace::get_num_threads, localities(%1%)",
+        num_threads.size());
 
     return num_threads;
 } // }}}
@@ -441,9 +440,9 @@ std::uint32_t locality_namespace::get_num_overall_threads()
         num_threads += get<1>(it->second);
     }
 
-    LAGAS_(info) << (boost::format(
-        "locality_namespace::get_num_overall_threads, localities(%1%)")
-        % num_threads);
+    LAGAS_(info) << hpx::util::format(
+        "locality_namespace::get_num_overall_threads, localities(%1%)",
+        num_threads);
 
     return num_threads;
 }
