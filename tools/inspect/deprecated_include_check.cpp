@@ -44,6 +44,7 @@ namespace boost
       { "boost/preprocessor/cat\\.hpp", "hpx/util/detail/pp/cat.hpp" },
       { "boost/preprocessor/stringize\\.hpp", "hpx/util/detail/pp/stringize.hpp" },
       { "boost/atomic\\.hpp", "atomic" },
+      { "boost/format\\.hpp", "hpx/util/format.hpp" },
       { nullptr, nullptr }
     };
 
